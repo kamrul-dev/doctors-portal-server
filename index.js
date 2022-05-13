@@ -48,11 +48,11 @@ async function run() {
                 //step 4: find bookins for that service output: [{}, {}, {}]
                 const serviceBookings = bookings.filter(book => book.treatment === service.name);
                 //step 5: select slots for the service bookings: ['', '', '', '']
-                const booked = serviceBookings.map(book => book.slot);
+                const bookedSlots = serviceBookings.map(book => book.slot);
                 // step 6: select those slots are not in bookedSlots
-                const available = service.slots.filter(slot => !booked.includes(slot));
+                const available = service.slots.filter(slot => !bookedSlots.includes(slot));
                 //step 7: set available to slots to make it easier
-                service.available = available;
+                service.slots = available;
 
             })
 
