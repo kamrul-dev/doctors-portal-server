@@ -48,6 +48,23 @@ async function run() {
             res.send(services);
         });
 
+        // laod users inforamtion on dashboard
+        app.get('/user', verifyJWT, async (req, res) => {
+            const users = await userCollections.find().toArray();
+            res.send(users);
+        })
+
+
+        app.put('/user/admin/:email', verifyJWT, async (req, res) => {
+            const email = req.params.email;
+
+            const filter = { email: email };
+            const updateDoc = {
+                $set: { role: 'admin' },
+            };
+            const result = await userCollections.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
         // update user information api
         app.put('/user/:email', async (req, res) => {
@@ -61,7 +78,7 @@ async function run() {
             const result = await userCollections.updateOne(filter, updateDoc, options);
             const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
             res.send({ result, token });
-        })
+        });
 
         // Warning !!!!;
         // This is not proper way to query
